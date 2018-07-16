@@ -1,0 +1,37 @@
+version: "2.0"
+
+services:
+
+  eiti-crud:
+    build: .
+    container_name: eiti-container
+    ports:
+      - 8081:8080
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_USER=user
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=db_eiti
+      - DATABASE_PORT=3306
+    links:
+      - mysql
+    networks:
+      - eiti-net
+
+  mysql:
+    image: mysql:5.6
+    container_name: mysql-container
+    ports:
+      - 3606:3606
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=db_eiti
+      - MYSQL_PASSWORD=password
+    networks:
+      - eiti-net
+
+networks:
+  eiti-net:
+    driver: bridge
