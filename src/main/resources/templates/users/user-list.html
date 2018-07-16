@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/head :: head">...</div>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <div th:replace="fragments/header :: header">...</div>
+    </header>
+
+    <section>
+
+        <div class="jumbotron">
+
+            <div th:if="${not #lists.isEmpty(users)}">
+                <h2>Usuários Cadastrados</h2>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Id</th>
+                        <th>Username</th>
+                        <th>Data de Registro</th>
+                        <th>Nome</th>
+                        <th>Sobrenome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Ativo</th>
+                        <th>Editar</th>
+                        <th>Apagar</th>
+                    </tr>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.registerDate}"></td>
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.surname}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phone}"></td>
+                        <td th:text="${user.enabled}"></td>
+                        <td><a th:href="${'/users/edit/' + user.id}" class="btn btn-default">Editar</a></td>
+                        <td><a th:href="${'/users/delete/' + user.id}" class="btn btn-danger">Apagar</a></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+        <div th:replace="fragments/footer :: footer">...</div>
+    </footer>
+
+</div>
+
+</body>
+</html>
