@@ -1,6 +1,7 @@
 package br.com.befullstack.eiticrud.controllers;
 
 import br.com.befullstack.eiticrud.models.User;
+import br.com.befullstack.eiticrud.models.UserDTO;
 import br.com.befullstack.eiticrud.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,8 @@ public class UserController {
 
         model.addAttribute("users", usersList);
 
+        model.addAttribute("userDTO", new UserDTO());
+
         return "users/user-list";
     }
 
@@ -98,7 +101,7 @@ public class UserController {
     /**
      * Salvar o novo usuário
      *
-     * @param user
+     * @param user Novo usuário
      * @return retorna para lista de usuários
      */
     @RequestMapping(path = "/users", method = RequestMethod.POST)
@@ -119,6 +122,20 @@ public class UserController {
         userService.deleteUser(id);
 
         return "redirect:/users";
+    }
+
+    @RequestMapping(path = "/users/filter", method = RequestMethod.POST)
+    public String filterListUser(UserDTO userDTO, Model model) {
+
+        LOGGER.info("Filtrando a lista");
+
+        List<User> userList = userService.findByUserDTO(userDTO);
+
+        model.addAttribute("users", userList);
+
+        model.addAttribute("userDTO", new UserDTO());
+
+        return "users/user-list";
     }
 
 }

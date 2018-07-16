@@ -1,6 +1,7 @@
 package br.com.befullstack.eiticrud.services;
 
 import br.com.befullstack.eiticrud.models.User;
+import br.com.befullstack.eiticrud.models.UserDTO;
 import br.com.befullstack.eiticrud.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Serviçoes relacionados ao Usuário
@@ -74,5 +76,23 @@ public class UserService {
         LOGGER.info("Deletando usuário");
 
         userRepository.delete(id);
+    }
+
+
+    /**
+     * Busca usuário filtrando pelo UserDTO
+     *
+     * @param userDTO UserDTO
+     * @return Lista de usuários filtrados
+     */
+    public List<User> findByUserDTO(UserDTO userDTO) {
+
+        LOGGER.info("Filtrando pelo UserDTO");
+
+        return userRepository.findAll().stream()
+                .filter(user -> user.getUsername().contains(userDTO.getUsername()))
+                .filter(user -> user.getName().contains(userDTO.getName()))
+                .filter(user -> user.getEmail().contains(userDTO.getEmail()))
+                .collect(Collectors.toList());
     }
 }
