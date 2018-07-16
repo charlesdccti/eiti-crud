@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <div th:replace="fragments/head :: head">...</div>
+
+    <title>Eiti Usuários</title>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div th:replace="fragments/header :: header">...</div>
+    </header>
+
+    <section>
+
+        <div class="jumbotron">
+
+            <div class="row text-center">
+                <img src="/static/images/eiti-logo.png" width="30%"
+                     th:src="@{/images/eiti-logo.png}"/>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        <div th:replace="fragments/footer :: footer">...</div>
+    </footer>
+
+</div>
+
+</body>
+
+</html>
