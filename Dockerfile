@@ -8,7 +8,7 @@ RUN mkdir -p /opt/app
 
 ENV PROJECT_HOME /opt/app
 
-COPY target/star-wars-api.jar $PROJECT_HOME/star-wars-api.jar
+COPY target/eiti-crud.jar $PROJECT_HOME/eiti-crud.jar
 
 WORKDIR $PROJECT_HOME
 
