@@ -10,7 +10,6 @@ import java.time.LocalDate;
 /**
  * Entidade de Usuários
  */
-
 @Data
 @Entity
 @NoArgsConstructor

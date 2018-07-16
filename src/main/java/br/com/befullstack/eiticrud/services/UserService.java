@@ -63,4 +63,16 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    /**
+     * Deletando usuário
+     *
+     * @param id Id do usuário
+     */
+    public void deleteUser(Integer id) {
+
+        LOGGER.info("Deletando usuário");
+
+        userRepository.delete(id);
+    }
 }

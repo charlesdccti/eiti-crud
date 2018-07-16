@@ -88,6 +88,8 @@ public class UserController {
     @RequestMapping(path = "/users/add", method = RequestMethod.GET)
     public String createUser(Model model) {
 
+        LOGGER.info("Gerando novo usuário");
+
         model.addAttribute("user", new User());
 
         return "users/user-form";
@@ -102,11 +104,21 @@ public class UserController {
     @RequestMapping(path = "/users", method = RequestMethod.POST)
     public String saveProduct(User user) {
 
-        LOGGER.info(user.toString());
+        LOGGER.info("Salvando novo usuário");
 
         userService.saveUser(user);
 
-        return "redirect:/";
+        return "redirect:/users";
+    }
+
+    @RequestMapping(path = "/users/delete/{id}", method = RequestMethod.GET)
+    public String deleteProduct(@PathVariable(name = "id") Integer id) {
+
+        LOGGER.info("Apagando usuário");
+
+        userService.deleteUser(id);
+
+        return "redirect:/users";
     }
 
 }
