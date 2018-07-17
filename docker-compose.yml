@@ -4,17 +4,13 @@ services:
 
   eiti-crud:
     build: .
-    container_name: eiti-container
+    container_name: eiti-docker
     ports:
       - 8081:8080
     depends_on:
       - mysql
     environment:
-      - DATABASE_HOST=mysql
-      - DATABASE_USER=user
-      - DATABASE_PASSWORD=password
-      - DATABASE_NAME=db_eiti
-      - DATABASE_PORT=3306
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/db_eiti?useSSL=false
     links:
       - mysql
     networks:
@@ -22,15 +18,14 @@ services:
 
   mysql:
     image: mysql:5.6
-    container_name: mysql-container
+    container_name: mysql-docker
     ports:
       - 3306:3306
-    expose:
-      - 3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=db_eiti
+      - MYSQL_USER=user
       - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=db_eiti
     networks:
       - eiti-net
 

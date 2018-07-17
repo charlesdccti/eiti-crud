@@ -87,7 +87,7 @@ public class UserService {
      */
     public List<User> findByUserDTO(UserDTO userDTO) {
 
-        LOGGER.info("Filtrando pelo UserDTO");
+        LOGGER.info("Filtrando usando o UserDTO");
 
         return userRepository.findAll().stream()
                 .filter(user -> user.getUsername().contains(userDTO.getUsername()))

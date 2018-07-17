@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class User {
 
     private String surname;
 
+    @Email
     private String email;
 
     private String phone;

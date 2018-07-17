@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -32,7 +33,7 @@ public class UserControllerTest {
 
     private User mockUser;
 
-    private List<User> mockUserList;
+    private List<User> mockUserList = new ArrayList<>();
 
     @Before
     public void setup() {
