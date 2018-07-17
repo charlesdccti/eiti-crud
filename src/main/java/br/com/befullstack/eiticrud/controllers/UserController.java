@@ -105,7 +105,7 @@ public class UserController {
      * @return retorna para lista de usuários
      */
     @RequestMapping(path = "/users", method = RequestMethod.POST)
-    public String saveProduct(User user) {
+    public String saveUser(User user) {
 
         LOGGER.info("Salvando novo usuário");
 
@@ -115,7 +115,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/users/delete/{id}", method = RequestMethod.GET)
-    public String deleteProduct(@PathVariable(name = "id") Integer id) {
+    public String deleteUser(@PathVariable(name = "id") Integer id) {
 
         LOGGER.info("Apagando usuário");
 
