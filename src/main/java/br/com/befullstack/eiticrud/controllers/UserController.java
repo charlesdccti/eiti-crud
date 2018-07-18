@@ -97,9 +97,10 @@ public class UserController {
      * @return retorna para o form se localizar o usuário
      */
     @GetMapping("/users/edit/{id}")
-    public String editUser(Model model, @PathVariable(value = "id") Integer id) {
+    public String editUser(Model model, @PathVariable(value = "id") Integer id, BindingResult result) {
 
-        LOGGER.info("Buscando usuário por Id");
+        LOGGER.debug("Updating a user entry with id: {}", id);
+
 
         model.addAttribute("user", userService.findById(id));
 
@@ -157,12 +158,7 @@ public class UserController {
 
     private String createRedirectViewPath(String requestMapping) {
 
-        StringBuilder redirectViewPath = new StringBuilder();
-
-        redirectViewPath.append("redirect:");
-        redirectViewPath.append(requestMapping);
-
-        return redirectViewPath.toString();
+        return "redirect:" + requestMapping;
     }
 
 }

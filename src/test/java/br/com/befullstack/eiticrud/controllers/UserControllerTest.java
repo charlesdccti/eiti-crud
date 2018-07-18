@@ -38,7 +38,7 @@ public class UserControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @MockBean
-    private UserService userService;
+    private UserService mockUserService;
 
     private User mockUser;
 
@@ -74,7 +74,7 @@ public class UserControllerTest {
     @Test
     public void shouldReturnUsersList() throws Exception {
 
-        when(userService.findAll())
+        when(mockUserService.findAll())
                 .thenReturn(mockUserList);
 
         mockMvc.perform(get("/users").accept(MediaType.TEXT_PLAIN))
@@ -86,7 +86,7 @@ public class UserControllerTest {
     @Test
     public void shouldInsertUser() throws Exception {
 
-        when(userService.saveUser(isA(User.class))).thenReturn(mockUser);
+        when(mockUserService.saveUser(isA(User.class))).thenReturn(mockUser);
 
         mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
@@ -96,39 +96,44 @@ public class UserControllerTest {
     @Test
     public void shouldEditUser() throws Exception {
 
-        when(userService.findById(1)).thenReturn(mockUser);
+        when(mockUserService.findById(mockUser.getId())).thenReturn(mockUser);
 
         mockMvc.perform(
-                get("users/edit/{id}", mockUser.getId()))
+                get("/users/edit/{id}", mockUser.getId()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(view().name("users/user-form"));
+
+        verify(mockUserService, times(1)).findById(mockUser.getId());
+
+        verifyNoMoreInteractions(mockUserService);
     }
 
     @Test
     public void shouldDeleteUser() throws Exception {
 
-        when(userService.deleteUser(mockUser.getId())).thenReturn(mockUser);
+        when(mockUserService.deleteUser(mockUser.getId())).thenReturn(mockUser);
 
-        mockMvc.perform(get("/users/delete/{id}").param("id", mockUser.getId().toString()))
-                .andExpect(status().isOk())
+        mockMvc.perform(get("/users/delete/{id}", mockUser.getId()))
+                .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/users"));
 
-        verify(userService, times(1)).deleteUser(mockUser.getId());
-        verifyNoMoreInteractions(userService);
+        verify(mockUserService, times(1)).deleteUser(mockUser.getId());
+
+        verifyNoMoreInteractions(mockUserService);
     }
 
     @Test
     public void findByIdUserNotFoundsShouldRender404View() throws Exception {
 
-        when(userService.findById(1)).thenThrow(new UserNotFoundException(""));
+        when(mockUserService.findById(1)).thenThrow(new UserNotFoundException(""));
 
-        mockMvc.perform(get("/todo/{id}", 1L))
+        mockMvc.perform(get("/users/edit/{id}", 1))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("404"));
 
-        // verify(mockUser, times(1)).findById(1);
+        verify(mockUserService, times(1)).findById(1);
 
-        verifyZeroInteractions(userService);
+        verifyZeroInteractions(mockUserService);
     }
 }
