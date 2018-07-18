@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class UserController {
      * @param model Model do MVC
      * @return retorna para a página index.html
      */
-    @RequestMapping("/")
+    @GetMapping("/")
     public String home(Model model) {
 
         LOGGER.info("Home");
@@ -51,7 +51,7 @@ public class UserController {
      * @param model Model do MVC
      * @return Retorna para página de usuários
      */
-    @RequestMapping("/users")
+    @GetMapping("/users")
     public String listUsers(Model model) {
 
         LOGGER.info("Buscando todos os usuários");
@@ -72,7 +72,7 @@ public class UserController {
      * @param id    Id do usuário
      * @return retorna para o form se localizar o usuário
      */
-    @RequestMapping(path = "/users/edit/{id}", method = RequestMethod.GET)
+    @GetMapping("/users/edit/{id}")
     public String editUser(Model model, @PathVariable(value = "id") Integer id) {
 
         LOGGER.info("Buscando usuário por Id");
@@ -88,7 +88,7 @@ public class UserController {
      * @param model Model do MVC
      * @return retorna para o form criando novo usuário
      */
-    @RequestMapping(path = "/users/add", method = RequestMethod.GET)
+    @GetMapping("/users/add")
     public String createUser(Model model) {
 
         LOGGER.info("Gerando novo usuário");
@@ -104,7 +104,7 @@ public class UserController {
      * @param user Novo usuário
      * @return retorna para lista de usuários
      */
-    @RequestMapping(path = "/users", method = RequestMethod.POST)
+    @PostMapping("/users")
     public String saveUser(User user) {
 
         LOGGER.info("Salvando novo usuário");
@@ -114,7 +114,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @RequestMapping(path = "/users/delete/{id}", method = RequestMethod.GET)
+    @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Integer id) {
 
         LOGGER.info("Apagando usuário");
@@ -124,7 +124,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @RequestMapping(path = "/users/filter", method = RequestMethod.POST)
+    @PostMapping("/users/filter")
     public String filterListUser(UserDTO userDTO, Model model) {
 
         LOGGER.info("Filtrando a lista");

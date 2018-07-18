@@ -78,7 +78,6 @@ public class UserService {
         userRepository.delete(id);
     }
 
-
     /**
      * Busca usuário filtrando pelo UserDTO
      *
