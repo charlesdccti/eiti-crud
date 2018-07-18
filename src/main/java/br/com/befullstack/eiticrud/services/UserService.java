@@ -57,13 +57,13 @@ public class UserService {
      *
      * @param user Novo Usuário
      */
-    public void saveUser(User user) {
+    public User saveUser(User user) {
 
         LOGGER.info("Salvando novo usuário");
 
         user.setRegisterDate(LocalDate.now());
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     /**
@@ -71,11 +71,17 @@ public class UserService {
      *
      * @param id Id do usuário
      */
-    public void deleteUser(Integer id) {
+    public User deleteUser(Integer id) {
 
-        LOGGER.info("Deletando usuário");
+        LOGGER.debug("Deleting a user entry with id: {}", id);
 
-        userRepository.delete(id);
+        User deletedUser = findById(id);
+
+        LOGGER.debug("Deleting user entry: {}", deletedUser);
+
+        userRepository.delete(deletedUser);
+
+        return deletedUser;
     }
 
     /**
