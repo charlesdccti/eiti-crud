@@ -1,17 +1,22 @@
 package br.com.befullstack.eiticrud.controllers;
 
+import br.com.befullstack.eiticrud.errors.UserNotFoundException;
 import br.com.befullstack.eiticrud.models.User;
 import br.com.befullstack.eiticrud.models.UserDTO;
 import br.com.befullstack.eiticrud.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -24,9 +29,12 @@ public class UserController {
 
     private UserService userService;
 
+    private final MessageSource messageSource;
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+        messageSource = null;
     }
 
     /**
@@ -66,6 +74,22 @@ public class UserController {
     }
 
     /**
+     * Gera novo usuário
+     *
+     * @param model Model do MVC
+     * @return retorna para o form criando novo usuário
+     */
+    @GetMapping("/users/add")
+    public String createUser(Model model) {
+
+        LOGGER.info("Gerando novo usuário");
+
+        model.addAttribute("user", new User());
+
+        return "users/user-form";
+    }
+
+    /**
      * Edita um usuário
      *
      * @param model Model do MVC
@@ -83,45 +107,38 @@ public class UserController {
     }
 
     /**
-     * Gera novo usuário
-     *
-     * @param model Model do MVC
-     * @return retorna para o form criando novo usuário
-     */
-    @GetMapping("/users/add")
-    public String createUser(Model model) {
-
-        LOGGER.info("Gerando novo usuário");
-
-        model.addAttribute("user", new User());
-
-        return "users/user-form";
-    }
-
-    /**
      * Salvar o novo usuário
      *
      * @param user Novo usuário
      * @return retorna para lista de usuários
      */
     @PostMapping("/users")
-    public String saveUser(User user) {
+    public String saveUser(@Valid User user, BindingResult result, RedirectAttributes attributes) {
 
-        LOGGER.info("Salvando novo usuário");
+        LOGGER.debug("Adding a new user entry with information: {}", user);
 
-        userService.saveUser(user);
+        if (result.hasErrors()) {
+            LOGGER.debug("Add user form was submitted with binding errors. Rendering form view.");
+            return "users/user-form";
+        }
 
-        return "redirect:/users";
+        User savedUser = userService.saveUser(user);
+
+        LOGGER.debug("Added a to-do entry with information: {}", savedUser);
+
+        return createRedirectViewPath("/users");
     }
 
     @GetMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") Integer id) {
+    public String deleteUser(@PathVariable(name = "id") Integer id, RedirectAttributes attributes) throws UserNotFoundException {
 
-        LOGGER.info("Apagando usuário");
+        LOGGER.debug("Deleting a user entry with id: {}", id);
 
-        userService.deleteUser(id);
+        User deleteUser = userService.deleteUser(id);
 
-        return "redirect:/users";
+        LOGGER.debug("Deleted user entry with information: {}", deleteUser);
+
+        return createRedirectViewPath("/users");
     }
 
     @PostMapping("/users/filter")
@@ -136,6 +153,16 @@ public class UserController {
         model.addAttribute("userDTO", new UserDTO());
 
         return "users/user-list";
+    }
+
+    private String createRedirectViewPath(String requestMapping) {
+
+        StringBuilder redirectViewPath = new StringBuilder();
+
+        redirectViewPath.append("redirect:");
+        redirectViewPath.append(requestMapping);
+
+        return redirectViewPath.toString();
     }
 
 }
