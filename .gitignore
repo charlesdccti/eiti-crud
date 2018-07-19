@@ -1,3 +1,11 @@
 .idea
 
+.mvn
+
 eiti-crud.iml
+
+mvnw
+
+mvnw.cmd
+
+target/
