@@ -122,4 +122,4 @@ Deyve Vieira
 
  Fiz um crud mvc com Spring Boot, Thymeleaf e MySQL. Foquei em dockerizar toda a aplicação tanto que para executar precisa ter o Docker instalado na máquina.
 
- Entre os pontos fortes posso destacar a utilização do Docker  e pontos a melhorar são: a cobertura de testes, as validações nos controlles e nos services, exibições das mensagens tanto de erro quanto de sucesso na view com Thymeleaf e também a validação com Bean Validation
+ Entre os pontos fortes posso destacar a utilização do Docker e pontos a melhorar são: a cobertura de testes, as validações nos controlles e nos services, exibições das mensagens tanto de erro quanto de sucesso na view com Thymeleaf,a validação com Bean Validation, Internacionalização com i18n e Segurança com Spring Security
