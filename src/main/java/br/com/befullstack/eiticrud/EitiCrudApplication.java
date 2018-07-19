@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class EitiCrudApplication {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DockerRunner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EitiCrudApplication.class);
 
     public static void main(String[] args) {
 
