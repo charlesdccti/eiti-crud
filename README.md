@@ -80,12 +80,10 @@
 git clone https://github.com/deyvedvm/eiti-crud.git
 ```
 
-Todos os comendos executados na pasta do projeto
 
 ### Ambiente local de Dev
 
 ```text
-
 cd eiti-crud/
 
 docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db_eiti -e MYSQL_USER=user -e MYSQL_PASSWORD=password -d mysql:5.6
@@ -95,10 +93,11 @@ mvn spring-boot:run
 
 Endereço local:  `http://localhost:8088/`
 
+
+
 ### Ambiente de Produção
 
 ```text
-
 cd eiti-crud/
 
 mvn package
@@ -107,6 +106,8 @@ docker-compose build
 
 docker-compose up
 ```
+Endereço em produção:  `http://localhost:8081/`
+
 
 # Autor
 
