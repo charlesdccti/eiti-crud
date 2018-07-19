@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * Entidade de Usuários
@@ -30,7 +30,8 @@ public class User {
 
     private boolean isEnabled;
 
-    private LocalDate registerDate;
+    @Temporal(TemporalType.DATE)
+    private Date registerDate;
 
     private String name;
 

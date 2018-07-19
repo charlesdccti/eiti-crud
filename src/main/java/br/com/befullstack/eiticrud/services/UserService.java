@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +34,13 @@ public class UserService {
      */
     public List<User> findAll() {
 
-        LOGGER.info("Buscando todos os usuários");
+        LOGGER.info("Searching all users");
 
-        return userRepository.findAll();
+        List<User> foundUsers = userRepository.findAll();
+
+        LOGGER.info("Found users: {}", foundUsers);
+
+        return foundUsers;
     }
 
     /**
@@ -47,9 +51,13 @@ public class UserService {
      */
     public User findById(Integer id) {
 
-        LOGGER.info("Buscando usuário por Id");
+        LOGGER.info("Finding user by Id: {}", id);
 
-        return userRepository.findOne(id);
+        User foundUser = userRepository.findOne(id);
+
+        LOGGER.info("Found user: {}", foundUser);
+
+        return foundUser;
     }
 
     /**
@@ -59,11 +67,15 @@ public class UserService {
      */
     public User saveUser(User user) {
 
-        LOGGER.info("Salvando novo usuário");
+        LOGGER.info("Saving new user: {}", user);
 
-        user.setRegisterDate(LocalDate.now());
+        user.setRegisterDate(new Date());
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        LOGGER.info("Saving new user: {}", savedUser);
+
+        return savedUser;
     }
 
     /**
@@ -73,11 +85,11 @@ public class UserService {
      */
     public User deleteUser(Integer id) {
 
-        LOGGER.debug("Deleting a user entry with id: {}", id);
+        LOGGER.info("Deleting a user entry with id: {}", id);
 
         User deletedUser = findById(id);
 
-        LOGGER.debug("Deleting user entry: {}", deletedUser);
+        LOGGER.info("Deleting user entry: {}", deletedUser);
 
         userRepository.delete(deletedUser);
 
@@ -92,12 +104,16 @@ public class UserService {
      */
     public List<User> findByUserDTO(UserDTO userDTO) {
 
-        LOGGER.info("Filtrando usando o UserDTO");
+        LOGGER.info("filtering the list with UserDTO: {}", userDTO);
 
-        return userRepository.findAll().stream()
+        List<User> filteredUuserList = userRepository.findAll().stream()
                 .filter(user -> user.getUsername().contains(userDTO.getUsername()))
                 .filter(user -> user.getName().contains(userDTO.getName()))
                 .filter(user -> user.getEmail().contains(userDTO.getEmail()))
                 .collect(Collectors.toList());
+
+        LOGGER.info("Filtered user list: {}", filteredUuserList);
+
+        return filteredUuserList;
     }
 }

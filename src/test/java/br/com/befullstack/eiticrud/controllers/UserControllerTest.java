@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Matchers.isA;
@@ -54,7 +54,7 @@ public class UserControllerTest {
                 .surname("Vieira")
                 .email("deyvedvm@hotmail.com")
                 .phone("21981962657")
-                .registerDate(LocalDate.now())
+                .registerDate(new Date())
                 .isEnabled(true)
                 .build();
 
@@ -123,17 +123,4 @@ public class UserControllerTest {
         verifyNoMoreInteractions(mockUserService);
     }
 
-    @Test
-    public void findByIdUserNotFoundsShouldRender404View() throws Exception {
-
-        when(mockUserService.findById(1)).thenThrow(new UserNotFoundException(""));
-
-        mockMvc.perform(get("/users/edit/{id}", 1))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("404"));
-
-        verify(mockUserService, times(1)).findById(1);
-
-        verifyZeroInteractions(mockUserService);
-    }
 }

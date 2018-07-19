@@ -27,6 +27,8 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
+    private static final String USER_FORM = "users/user-form";
+
     private UserService userService;
 
     private final MessageSource messageSource;
@@ -46,7 +48,7 @@ public class UserController {
     @GetMapping("/")
     public String home(Model model) {
 
-        LOGGER.info("Home");
+        LOGGER.info("Home Page");
 
         model.addAttribute("message", "Hello World!");
 
@@ -62,9 +64,11 @@ public class UserController {
     @GetMapping("/users")
     public String listUsers(Model model) {
 
-        LOGGER.info("Buscando todos os usuários");
+        LOGGER.info("Finding the user list");
 
         List<User> usersList = userService.findAll();
+
+        LOGGER.info("List of users found: {}", usersList);
 
         model.addAttribute("users", usersList);
 
@@ -82,11 +86,11 @@ public class UserController {
     @GetMapping("/users/add")
     public String createUser(Model model) {
 
-        LOGGER.info("Gerando novo usuário");
+        LOGGER.info("Creating a new user");
 
         model.addAttribute("user", new User());
 
-        return "users/user-form";
+        return USER_FORM;
     }
 
     /**
@@ -97,14 +101,17 @@ public class UserController {
      * @return retorna para o form se localizar o usuário
      */
     @GetMapping("/users/edit/{id}")
-    public String editUser(Model model, @PathVariable(value = "id") Integer id, BindingResult result) {
+    public String editUser(Model model, @PathVariable(value = "id") Integer id) {
 
-        LOGGER.debug("Updating a user entry with id: {}", id);
+        LOGGER.info("Finding a user entry with id: {}", id);
 
+        User user = userService.findById(id);
 
-        model.addAttribute("user", userService.findById(id));
+        LOGGER.info("Finding user: {}", user);
 
-        return "users/user-form";
+        model.addAttribute("user", user);
+
+        return USER_FORM;
     }
 
     /**
@@ -116,16 +123,16 @@ public class UserController {
     @PostMapping("/users")
     public String saveUser(@Valid User user, BindingResult result, RedirectAttributes attributes) {
 
-        LOGGER.debug("Adding a new user entry with information: {}", user);
+        LOGGER.info("Adding a new user entry with information: {}", user);
 
         if (result.hasErrors()) {
-            LOGGER.debug("Add user form was submitted with binding errors. Rendering form view.");
-            return "users/user-form";
+            LOGGER.info("Add user form was submitted with binding errors. Rendering form view.");
+            return USER_FORM;
         }
 
         User savedUser = userService.saveUser(user);
 
-        LOGGER.debug("Added a to-do entry with information: {}", savedUser);
+        LOGGER.info("Added a user entry with information: {}", savedUser);
 
         return createRedirectViewPath("/users");
     }
@@ -133,11 +140,17 @@ public class UserController {
     @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Integer id, RedirectAttributes attributes) throws UserNotFoundException {
 
-        LOGGER.debug("Deleting a user entry with id: {}", id);
+        LOGGER.info("Deleting a user entry with id: {}", id);
 
-        User deleteUser = userService.deleteUser(id);
+        User deleteUser = null;
 
-        LOGGER.debug("Deleted user entry with information: {}", deleteUser);
+        try {
+            deleteUser = userService.deleteUser(id);
+        } catch (UserNotFoundException e) {
+            LOGGER.info("Error deleting user with id:", e);
+        }
+
+        LOGGER.info("Deleted user entry with information: {}", deleteUser);
 
         return createRedirectViewPath("/users");
     }
@@ -145,9 +158,11 @@ public class UserController {
     @PostMapping("/users/filter")
     public String filterListUser(UserDTO userDTO, Model model) {
 
-        LOGGER.info("Filtrando a lista");
+        LOGGER.info("filtering the list with UserDTO: {}", userDTO);
 
         List<User> userList = userService.findByUserDTO(userDTO);
+
+        LOGGER.info("filtered list: {}", userList);
 
         model.addAttribute("users", userList);
 

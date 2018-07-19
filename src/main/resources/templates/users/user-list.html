@@ -67,7 +67,7 @@
                     <tr th:each="user : ${users}">
                         <td th:text="${user.id}"></td>
                         <td th:text="${user.username}"></td>
-                        <td th:text="${user.registerDate}"></td>
+                        <td th:text="${#dates.format(user.registerDate, 'dd/MMM/yyyy')}"></td>
                         <td th:text="${user.name}"></td>
                         <td th:text="${user.surname}"></td>
                         <td th:text="${user.email}"></td>

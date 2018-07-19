@@ -5,13 +5,13 @@ import br.com.befullstack.eiticrud.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class UsersServiceTest {
 
@@ -29,7 +29,7 @@ public class UsersServiceTest {
                 .surname("Vieira")
                 .email("deyvedvm@hotmail.com")
                 .phone("21981962657")
-                .registerDate(LocalDate.now())
+                .registerDate(new Date())
                 .isEnabled(true)
                 .build();
 
@@ -49,5 +49,36 @@ public class UsersServiceTest {
 
         assertEquals(userList.size(), mockUserList.size());
     }
+
+    @Test
+    public void shouldInsertUser() {
+
+        UserRepository mockUserRepository = mock(UserRepository.class);
+
+        when(mockUserRepository.save(mockUser)).thenReturn(mockUser);
+
+        UserService userService = new UserService(mockUserRepository);
+
+        userService.saveUser(mockUser);
+
+        verify(mockUserRepository, times(1)).save(mockUser);
+    }
+
+
+    @Test
+    public void shouldFindUserById() {
+
+        UserRepository mockUserRepository = mock(UserRepository.class);
+
+        when(mockUserRepository.findOne(mockUser.getId())).thenReturn(mockUser);
+
+        UserService userService = new UserService(mockUserRepository);
+
+        User user = userService.findById(mockUser.getId());
+
+        assertEquals(user.getName(), mockUser.getName());
+    }
+
+
 
 }
